@@ -1,9 +1,7 @@
-package med.voll.api.medico;
+package med.voll.api.paciente;
 
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,43 +12,40 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.voll.api.endereco.Endereco;
+import med.voll.api.pacientedtos.DadosAtualizacaoPaciente;
+import med.voll.api.pacientedtos.DadosCadastroPaciente;
 
-
-@Table(name = "medicos")
-@Entity(name = "Medico")
+@Table(name = "pacientes")
+@Entity(name = "paciente")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Medico {
-   
-
+public class Paciente {
+    
+  
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private String email;
     private String telefone;
-    private String crm;
-    
-    @Enumerated(EnumType.STRING)
-    private Especialidade especialidade;
-    
-    @Embedded
+    private String cpf;
     @Valid
+    @Embedded
     private Endereco endereco;
     private Boolean ativo;
     
-    public Medico(DadosCadastroMedico dados) {
-        this.ativo = true;
-        this.nome = dados.nome();
-        this.email = dados.email();
-        this.telefone = dados.telefone();
-        this.crm = dados.crm();
-        this.especialidade = dados.especialidade();
-        this.endereco = new Endereco(dados.endereco());
-    }
-
-    public void atualizarInformacoes( DadosAtualizacaoMedico dados) {
+    public Paciente( DadosCadastroPaciente dados) {   
+            this.ativo = true;
+            this.nome = dados.nome();
+            this.email = dados.email();
+            this.telefone = dados.telefone();
+            this.cpf= dados.cpf();
+            this.endereco = dados.endereco();
+           
+        }
+    
+     public void atualizarInformacoes( DadosAtualizacaoPaciente dados) {
         if(dados.nome() != null){
             this.nome = dados.nome();
         }
@@ -66,4 +61,5 @@ public class Medico {
     public void excluir(){
         this.ativo = false;
     }
+    
 }
